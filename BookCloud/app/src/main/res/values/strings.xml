@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BookCloud</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+    <string name="introduzca_el_correo">Introduzca el correo</string>
+    <string name="introduzca_la_contraseña">Introduzca su contraseña</string>
+    <string name="aun_no_tiene_cuenta_registrese_pulsando_aqui">Aun no tiene cuenta,Registrese pulsando aqui</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="repita_su_contrase_a">Repita su contraseña</string>
+    <string name="introduzca_sus_apellidos">Introduzca sus apellidos</string>
+    <string name="introduzca_su_nombre">Introduzca su nombre</string>
+    <string name="introduzca_su_correo">Introduzca su correo</string>
+</resources>

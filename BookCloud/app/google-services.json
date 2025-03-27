@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "818832340029",
+    "firebase_url": "https://comprasbd-ed8ae-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "comprasbd-ed8ae",
+    "storage_bucket": "comprasbd-ed8ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818832340029:android:a8a7ec8831f91a0493e654",
+        "android_client_info": {
+          "package_name": "com.example.bookcloud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR0W0EvTV_eieXHurB6j9Xwf83bQclk7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818832340029:android:227a27a380def91193e654",
+        "android_client_info": {
+          "package_name": "com.example.examen2_evaluacion_javier_alonso"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR0W0EvTV_eieXHurB6j9Xwf83bQclk7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818832340029:android:b22e56bea509e6fb93e654",
+        "android_client_info": {
+          "package_name": "com.example.examen_javier_alonso_mansilla_navegacion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR0W0EvTV_eieXHurB6j9Xwf83bQclk7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818832340029:android:3ab33bd06169480093e654",
+        "android_client_info": {
+          "package_name": "com.example.navegacion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR0W0EvTV_eieXHurB6j9Xwf83bQclk7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

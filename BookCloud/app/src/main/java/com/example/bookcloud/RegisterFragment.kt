@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.bookcloud.databinding.FragmentRegisterBinding
 import com.example.bookcloud.model.Usuario
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -60,6 +61,8 @@ class RegisterFragment : Fragment() {
                           }
                       }
                   }
+          }else{
+              Snackbar.make(view,"Error. Campos vacíos",Snackbar.LENGTH_LONG).show()
           }
       }
     }

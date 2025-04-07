@@ -40,6 +40,8 @@ class LoginFragment : Fragment() {
                       Snackbar.make(view,"Error,no hay usuario con ese correo o contraseña",Snackbar.LENGTH_LONG).show()
                   }
               }
+          }else{
+              Snackbar.make(view,"Error.Campos vacíos",Snackbar.LENGTH_LONG).show()
           }
       }
         binding.textRegistar.setOnClickListener{

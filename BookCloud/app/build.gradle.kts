@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -40,6 +41,8 @@ android {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.github.bumptech.glide/glide
+    implementation(libs.glide)
     implementation(libs.stripe.android)
     implementation(libs.financial.connections)
     implementation(libs.androidx.core.ktx)

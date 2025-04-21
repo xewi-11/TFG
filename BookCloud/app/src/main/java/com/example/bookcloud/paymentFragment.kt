@@ -1,49 +1,57 @@
 package com.example.bookcloud
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.stripe.android.PaymentConfiguration
-import com.stripe.android.PaymentIntentResult
 import com.stripe.android.Stripe
 import com.stripe.android.googlepaylauncher.GooglePayEnvironment
 import com.stripe.android.googlepaylauncher.GooglePayLauncher
-import com.stripe.android.model.*
+import com.stripe.android.model.ConfirmPaymentIntentParams
 import org.json.JSONObject
 
-class PaymentActivity : AppCompatActivity() {
-
+class paymentFragment: Fragment() {
     private lateinit var stripe: Stripe
     private lateinit var googlePayLauncher: GooglePayLauncher
+
     private lateinit var cardInputWidget: com.stripe.android.view.CardInputWidget
     private lateinit var googlePayButton: Button
     private lateinit var cardPayButton: Button
     private lateinit var nameInput: EditText
     private lateinit var emailInput: EditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.acitivity_payment)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.acitivity_payment, container, false)
+    }
 
-        // Stripe Init
-        PaymentConfiguration.init(applicationContext, "pk_test_TU_CLAVE_PUBLICA")
-        stripe = Stripe(applicationContext, PaymentConfiguration.getInstance(applicationContext).publishableKey)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // UI
-        cardInputWidget = findViewById(R.id.cardInputWidget)
-        googlePayButton = findViewById(R.id.googlePayButton)
-        cardPayButton = findViewById(R.id.cardPayButton)
-        nameInput = findViewById(R.id.customerName)
-        emailInput = findViewById(R.id.customerEmail)
+        // Init Stripe
+        PaymentConfiguration.init(requireContext(), R.string.tokenStripe.toString())
+        stripe = Stripe(requireContext(), PaymentConfiguration.getInstance(requireContext()).publishableKey)
+
+        // UI refs
+        cardInputWidget = view.findViewById(R.id.cardInputWidget)
+        googlePayButton = view.findViewById(R.id.googlePayButton)
+        cardPayButton = view.findViewById(R.id.cardPayButton)
+        nameInput = view.findViewById(R.id.customerName)
+        emailInput = view.findViewById(R.id.customerEmail)
 
         // Google Pay Setup
         googlePayLauncher = GooglePayLauncher(
-            activity = this,
+            fragment = this,
             config = GooglePayLauncher.Config(
                 environment = GooglePayEnvironment.Test,
                 merchantCountryCode = "US",
@@ -85,7 +93,7 @@ class PaymentActivity : AppCompatActivity() {
             if (clientSecret != null) {
                 val confirmParams = ConfirmPaymentIntentParams
                     .createWithPaymentMethodCreateParams(params, clientSecret)
-                stripe.confirmPayment(this, confirmParams)
+                stripe.confirmPayment(requireActivity(), confirmParams)
             } else {
                 mostrarError("No se pudo obtener el clientSecret")
             }
@@ -95,10 +103,10 @@ class PaymentActivity : AppCompatActivity() {
     private fun onGooglePayResult(result: GooglePayLauncher.Result) {
         when (result) {
             is GooglePayLauncher.Result.Completed -> {
-                Toast.makeText(this, "✅ Pago completado con Google Pay", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "✅ Pago completado con Google Pay", Toast.LENGTH_LONG).show()
             }
             is GooglePayLauncher.Result.Canceled -> {
-                Toast.makeText(this, "Pago cancelado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Pago cancelado", Toast.LENGTH_SHORT).show()
             }
             is GooglePayLauncher.Result.Failed -> {
                 mostrarError("Error: ${result.error.message}")
@@ -107,14 +115,16 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun obtenerClientSecret(callback: (String?) -> Unit) {
-        val url = "https://stripe-backend-abc123.onrender.com/create-payment-intent" // cambia esto a tu URL real
+        val url =
+            "https://stripe-backend-s5cg.onrender.com/create-payment-intent" // reemplaza con tu backend real
 
         val json = JSONObject()
-        json.put("amount", 5000) // $50.00 USD
+        json.put("amount", 5000)
         json.put("currency", "usd")
 
-        val queue = Volley.newRequestQueue(this)
-        val request = object : JsonObjectRequest(Method.POST, url, json,
+        val queue = Volley.newRequestQueue(requireContext())
+        val request = object : JsonObjectRequest(
+            Method.POST, url, json,
             { response ->
                 val clientSecret = response.getString("clientSecret")
                 callback(clientSecret)
@@ -132,25 +142,6 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun mostrarError(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        stripe.onPaymentResult(requestCode, data, object : com.stripe.android.ApiResultCallback<PaymentIntentResult> {
-            override fun onSuccess(result: PaymentIntentResult) {
-                val status = result.intent.status
-                if (status == StripeIntent.Status.Succeeded) {
-                    Toast.makeText(this@PaymentActivity, "✅ Pago exitoso", Toast.LENGTH_LONG).show()
-                } else {
-                    mostrarError("❌ Pago no completado")
-                }
-            }
-
-            override fun onError(e: Exception) {
-                mostrarError("❌ Error: ${e.localizedMessage}")
-            }
-        })
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 }

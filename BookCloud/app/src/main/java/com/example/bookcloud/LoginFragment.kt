@@ -36,6 +36,7 @@ class LoginFragment : Fragment() {
               auth.signInWithEmailAndPassword(binding.editCorreo.text.toString(),binding.editPass.text.toString()).addOnCompleteListener {
                   if (it.isSuccessful){
                       //cambiar a main
+                      findNavController().navigate(R.id.action_FirstFragment_to_mainFragment)
                   }else{
                       Snackbar.make(view,"Error,no hay usuario con ese correo o contraseña",Snackbar.LENGTH_LONG).show()
                   }

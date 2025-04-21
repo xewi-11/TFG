@@ -55,6 +55,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.menu_carrito -> {
+                    findNavController().navigate(R.id.action_mainFragment_to_paymentFragment)
                     true
                 }
                 R.id.menu_favoritos -> {

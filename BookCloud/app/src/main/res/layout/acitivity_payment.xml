@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/paymentScreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/paymentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pago"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Nombre del cliente -->
+        <EditText
+            android:id="@+id/customerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre completo"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Email del cliente -->
+        <EditText
+            android:id="@+id/customerEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Campo de tarjeta de Stripe -->
+        <com.stripe.android.view.CardInputWidget
+            android:id="@+id/cardInputWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Botón para pagar con tarjeta -->
+        <Button
+            android:id="@+id/cardPayButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pagar con Tarjeta"
+            android:backgroundTint="#0A8FDC"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Botón para pagar con Google Pay -->
+        <Button
+            android:id="@+id/googlePayButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pagar con Google Pay"
+            android:visibility="gone"
+            android:backgroundTint="#000000"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>

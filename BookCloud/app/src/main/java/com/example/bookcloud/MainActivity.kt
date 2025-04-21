@@ -1,6 +1,7 @@
 package com.example.bookcloud
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -14,7 +15,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.bookcloud.databinding.ActivityMainBinding
-import com.google.android.material.navigation.NavigationView
+import com.stripe.android.PaymentConfiguration
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,10 +42,14 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
-        drawerLayout = findViewById(R.id.drawerLayout)
-        navigationView = findViewById(R.id.navigationView)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        
+        //Init Stripe
+        PaymentConfiguration.init(
+            applicationContext,
+                R.string.tokenStripe.toString()
+        )
+
+    }
 
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,

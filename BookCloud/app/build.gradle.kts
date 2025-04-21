@@ -40,7 +40,9 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.material) // o la más reciente
+    implementation (libs.glide)
+    implementation(libs.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

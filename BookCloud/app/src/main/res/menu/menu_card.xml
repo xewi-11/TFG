@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_detallesCard"
+        android:title="ver detalles"
+        android:icon="@drawable/gente"/>
+    <item
+        android:id="@+id/menu_carritoCard"
+        android:title="añadir al carrito"
+        android:icon="@drawable/buscar"/>
+    <item
+        android:id="@+id/menu_favoritosCard"
+        android:title=" añadir a favoritos"
+        android:icon="@drawable/favorito"/>
+
+</menu>

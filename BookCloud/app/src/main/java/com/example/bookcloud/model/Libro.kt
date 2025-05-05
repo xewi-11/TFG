@@ -5,7 +5,7 @@ class Libro(
     var nombre: String? = null,
     var autor: String? = null,
     var precio: String? = null,
-    var imagen: String? = null,
+    var foto: String? = null,
     var descripcion: String? = null,
     var categoria: String? = null,
     var cantidad: Int? = null

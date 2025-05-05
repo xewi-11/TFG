@@ -32,7 +32,7 @@ class RegisterFragment : Fragment() {
 
         binding = FragmentRegisterBinding.inflate(layoutInflater)
         auth=FirebaseAuth.getInstance()
-        database=FirebaseDatabase.getInstance("https://comprasbd-ed8ae-default-rtdb.europe-west1.firebasedatabase.app/")
+        database=FirebaseDatabase.getInstance("https://bookcloud-440ad-default-rtdb.europe-west1.firebasedatabase.app/")
         return binding.root
 
     }
@@ -50,7 +50,8 @@ class RegisterFragment : Fragment() {
                               binding.editNombre.text.toString(),
                                 binding.editApellido.text.toString(),
                               binding.editCorreo.text.toString(),
-                              binding.editPass.text.toString()
+                              binding.editPass.text.toString(),
+                              arrayListOf()
                           )
                           val reference = database.reference.child("usuarios").child(auth.currentUser!!.uid)
                           reference.setValue(usuario).addOnCompleteListener {

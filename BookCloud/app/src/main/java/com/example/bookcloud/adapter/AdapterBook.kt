@@ -35,7 +35,7 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
 
     override fun onBindViewHolder(holder: myHolder, position: Int) {
         val libro=listaProductos[position]
-        Glide.with(context).load(libro.imagen).into(holder.imagen)
+        Glide.with(context).load(libro.foto).into(holder.imagen)
         holder.toolbar.setTitle("${libro.nombre}")
         holder.toolbar.setOnMenuItemClickListener{
             when(it.itemId){

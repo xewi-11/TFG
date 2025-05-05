@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@android:color/holo_blue_light">
         <androidx.appcompat.widget.Toolbar
@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/toolbarCard"/>
         <ImageView
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:layout_width="100dp"
             android:layout_height="100dp"

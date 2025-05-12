@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.R
+import com.example.bookcloud.databinding.ViewDetailUserBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -37,6 +38,7 @@ class DialogProfileUser : DialogFragment() {
     private lateinit var dialog: DialogProfileUser
     private lateinit var database: FirebaseDatabase
     private lateinit var UsuarioDao: UserDAO
+    private lateinit var listener: onRequestConfirmacion
 
     /**
      * Se ejecuta cuando el fragmento se adjunta al contexto. Inicializa Firebase y el DAO.
@@ -49,6 +51,7 @@ class DialogProfileUser : DialogFragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance("https://bookcloud-440ad-default-rtdb.europe-west1.firebasedatabase.app/")
         vista = LayoutInflater.from(context).inflate(R.layout.view_detail_user, null)
+        listener=context as onRequestConfirmacion
         UsuarioDao = UserDAO(context)
     }
 
@@ -61,7 +64,8 @@ class DialogProfileUser : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireActivity())
         builder.setView(vista)
-        return super.onCreateDialog(savedInstanceState)
+        //builder.setMessage("prueba")
+        return builder.create()
     }
 
     /**
@@ -92,9 +96,13 @@ class DialogProfileUser : DialogFragment() {
                 textApellido.setText(usuario.apellido)
                 textCorreo.setText(usuario.correo)
                 textPassword.setText(usuario.password)
+                listener.onConfirmacion(true)
             } else {
-                Snackbar.make(vista, "Error al obtener el usuario o no existe el usuario", Snackbar.LENGTH_SHORT).show()
+               listener.onConfirmacion(false)
             }
         }
+    }
+    interface onRequestConfirmacion{
+        fun onConfirmacion(respuesta:Boolean)
     }
 }

@@ -43,7 +43,6 @@ android {
 dependencies {
     // https://mvnrepository.com/artifact/com.github.bumptech.glide/glide
     implementation(libs.kotlinx.coroutines.play.services)
-
     implementation(libs.glide)
     implementation(libs.stripe.android)
     implementation(libs.financial.connections)
@@ -57,6 +56,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.volley)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

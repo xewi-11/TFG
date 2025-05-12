@@ -116,7 +116,7 @@ class paymentFragment: Fragment() {
 
     private fun obtenerClientSecret(callback: (String?) -> Unit) {
         val url =
-            "https://stripe-backend-s5cg.onrender.com/create-payment-intent" // reemplaza con tu backend real
+            "https://stripe-backend-s5cg.onrender.com/create-payment-intent"
 
         val json = JSONObject()
         json.put("amount", 5000)

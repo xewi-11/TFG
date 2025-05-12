@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_mainFragment_to_paymentFragment"
             app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_dialogProfileUser"
+            app:destination="@id/dialogProfileUser" />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
@@ -48,4 +51,13 @@
             android:id="@+id/action_paymentFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/dialogProfileUser"
+        android:name="com.example.bookcloud.Ui.dialog.DialogProfileUser"
+        android:label="view_detail_user"
+        tools:layout="@layout/view_detail_user" >
+        <action
+            android:id="@+id/action_dialogProfileUser_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </dialog>
 </navigation>

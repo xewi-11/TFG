@@ -41,7 +41,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
       binding.bntLoginRegister.setOnClickListener {
-          if (binding.editCorreo.text.isNotEmpty() && binding.editPass.text.isNotEmpty() && binding.editPass2.text.isNotEmpty() && binding.editNombre.text.isNotEmpty()&& binding.editApellido.text.isNotEmpty() && binding.editPass.text.equals(binding.editPass2.text)) {
+          if (binding.editCorreo.text.isNotEmpty() && binding.editPass.text.isNotEmpty() && binding.editPass2.text.isNotEmpty() && binding.editNombre.text.isNotEmpty()&& binding.editApellido.text.isNotEmpty() && binding.editPass.text.toString().equals(binding.editPass2.text.toString())) {
 
               auth.createUserWithEmailAndPassword(binding.editCorreo.text.toString(), binding.editPass.text.toString())
                   .addOnCompleteListener {

@@ -5,13 +5,14 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.bookcloud.Ui.dialog.DialogProfileUser
 import com.example.bookcloud.adapter.AdapterBook
 import com.example.bookcloud.databinding.ActivityMainBinding
 import com.example.bookcloud.model.Libro
 import com.google.android.material.snackbar.Snackbar
 import com.stripe.android.PaymentConfiguration
 
-class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener {
+class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfileUser.onRequestConfirmacion {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
@@ -48,5 +49,13 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener {
     }
     override fun onBookClick(libro: Libro) {
         Snackbar.make(binding.root, "Libro seleccionado: ${libro.nombre}", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onConfirmacion(respuesta: Boolean) {
+        if(respuesta){
+            Snackbar.make(binding.root,"Usuario Seleccionado correctamente",Snackbar.LENGTH_LONG).show()
+        }else{
+            Snackbar.make(binding.root,"Error al seleccionar el usuario",Snackbar.LENGTH_LONG).show()
+        }
     }
 }

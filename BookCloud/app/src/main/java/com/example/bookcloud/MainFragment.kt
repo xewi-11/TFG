@@ -62,6 +62,7 @@ class MainFragment : Fragment(){
         toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_perfil -> {
+                    findNavController().navigate(R.id.action_mainFragment_to_dialogProfileUser)
                     true
                 }
                 R.id.menu_carrito -> {

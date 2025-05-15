@@ -51,7 +51,10 @@ class RegisterFragment : Fragment() {
                                 binding.editApellido.text.toString(),
                               binding.editCorreo.text.toString(),
                               binding.editPass.text.toString(),
-                              arrayListOf()
+                              null,
+                              arrayListOf(),
+                              arrayListOf(),
+                              arrayListOf(),
                           )
                           val reference = database.reference.child("usuarios").child(auth.currentUser!!.uid)
                           reference.setValue(usuario).addOnCompleteListener {

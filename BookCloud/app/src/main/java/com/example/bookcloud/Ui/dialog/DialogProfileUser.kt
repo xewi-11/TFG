@@ -7,9 +7,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
@@ -17,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.R
+import com.example.bookcloud.model.Usuario
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,6 +39,8 @@ class DialogProfileUser : DialogFragment() {
     private lateinit var usuarioDao: UserDAO
     private lateinit var listener: onRequestConfirmacion
     private lateinit var btnFoto: ShapeableImageView
+    private lateinit var btnActualizar: Button
+    var passwordVisible = false
 
     private var imageUri: Uri? = null
 
@@ -77,14 +83,39 @@ class DialogProfileUser : DialogFragment() {
         textCorreo = vista.findViewById(R.id.textCorreo)
         textPassword = vista.findViewById(R.id.editTextPassword)
         btnFoto = vista.findViewById(R.id.btnFoto)
+        btnActualizar = vista.findViewById(R.id.btnGuardar)
 
         btnFoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.type = "image/*"
             imagePickerLauncher.launch(intent)
         }
-
+        btnActualizar.setOnClickListener {
+            actualizarPerfil()
+        }
         cogerPerfil()
+        textPassword.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = 2 // 0=left, 1=top, 2=right, 3=bottom
+                val drawable = textPassword.compoundDrawables[drawableEnd]
+                if (drawable != null && event.rawX >= (textPassword.right - drawable.bounds.width() - textPassword.paddingEnd)) {
+                    passwordVisible = !passwordVisible
+                    if (passwordVisible) {
+                        textPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        textPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ojo_abierto, 0)
+                    } else {
+                        textPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        textPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ojo, 0)
+                    }
+                    textPassword.setSelection(textPassword.text.length)
+
+                    // ✔ Llamada para accesibilidad
+                    v.performClick()
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
     }
 
     private fun subirImagenAFirebase(uri: Uri) {
@@ -105,8 +136,6 @@ class DialogProfileUser : DialogFragment() {
                 fileRef.downloadUrl
                     // 5. Agregar listener para el éxito de obtener la URL
                     .addOnSuccessListener { downloadUri ->
-                        Log.d("FIREBASE_STORAGE", "URL de descarga obtenida: $downloadUri")
-
                         // 6. Llamar a la función para guardar la URL en Firestore
                         // Esta función (guardarUrlEnFirestore) es donde se define userRef
                         // y se usa SetOptions.merge si es necesario.
@@ -163,6 +192,29 @@ class DialogProfileUser : DialogFragment() {
             }
         }
     }
+    private fun actualizarPerfil() {
+        val nombre = textNombre.text.toString().takeIf { it.isNotBlank() }
+        val apellido = textApellido.text.toString().takeIf { it.isNotBlank() }
+        val correo = textCorreo.text.toString().takeIf { it.isNotBlank() }
+        val password = textPassword.text.toString().takeIf { it.isNotBlank() }
+
+
+        val userId = auth.currentUser?.uid ?: return
+
+        lifecycleScope.launch {
+            val actualizado = usuarioDao.updateUser(
+                uid = userId,
+                nombre = nombre,
+                apellido = apellido,
+                correo = correo,
+                password = password,
+            )
+
+            listener.onConfirmacion(actualizado)
+        }
+    }
+
+
 
     interface onRequestConfirmacion {
         fun onConfirmacion(respuesta: Boolean)

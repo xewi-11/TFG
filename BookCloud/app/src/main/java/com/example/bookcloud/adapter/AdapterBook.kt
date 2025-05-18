@@ -8,12 +8,20 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.R
 import com.example.bookcloud.model.Libro
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
     RecyclerView.Adapter<AdapterBook.myHolder>() {
     private lateinit var listener: OnBookListener
+    private lateinit var UsuarioDAO: UserDAO
+    private lateinit var auth: FirebaseAuth
 
     inner class myHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val imagen: ImageView =itemView.findViewById(R.id.imageCard)
@@ -21,6 +29,8 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
         init {
             toolbar.inflateMenu(R.menu.menu_card)
             listener = context as OnBookListener;
+            UsuarioDAO= UserDAO(context)
+            auth= FirebaseAuth.getInstance()
         }
     }
 
@@ -40,10 +50,16 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
         holder.toolbar.setOnMenuItemClickListener{
             when(it.itemId){
                 R.id.menu_carritoCard->{
-                    // Implementar la lógica para agregar el libro al carrito
+                    // uso de corrutinas ya que intento llamar a un metodo suspend desde otro que no lo es,
+                    // y para hacer eso posible tengo que usar corrutinas
+                    CoroutineScope(Dispatchers.IO).launch {
+                        UsuarioDAO.añadirLibrosCarrito(auth.uid.toString(), libro)
+                    }
                 }
                 R.id.menu_favoritosCard->{
-                    // Implementar la lógica para agregar el libro a favoritos
+                    CoroutineScope(Dispatchers.IO).launch {
+                        UsuarioDAO.añadirLibroAFavoritos(auth.uid.toString(), libro)
+                    }
                 }
                 R.id.menu_detallesCard->{
                     listener.onBookClick(libro)

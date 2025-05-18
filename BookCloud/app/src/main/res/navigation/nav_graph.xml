@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_mainFragment_to_dialogProfileUser"
             app:destination="@id/dialogProfileUser" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
@@ -59,5 +62,24 @@
         <action
             android:id="@+id/action_dialogProfileUser_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_dialogProfileUser_to_addBookFragment"
+            app:destination="@id/addBookFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.bookcloud.ChatFragment"
+        android:label="ChatFragment" >
+        <action
+            android:id="@+id/action_chatFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addBookFragment"
+        android:name="com.example.bookcloud.AddBookFragment"
+        android:label="AddBookFragment" >
+        <action
+            android:id="@+id/action_addBookFragment_to_dialogProfileUser"
+            app:destination="@id/dialogProfileUser" />
+    </fragment>
 </navigation>

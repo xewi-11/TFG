@@ -1,13 +1,16 @@
 package com.example.bookcloud.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bookcloud.ChatFragment
 import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.R
 import com.example.bookcloud.model.Libro
@@ -62,6 +65,13 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
                     }
                 }
                 R.id.menu_detallesCard->{
+                    listener.onBookClick(libro)
+                }
+                R.id.menu_Chat->{
+                    // Aquí puedes agregar la lógica para abrir el chat
+                    val intent = Intent(context, ChatFragment::class.java)
+                    intent.putExtra("ownerId", libro.idUsuario) // el vendedor
+                    intent.putExtra("bookId", libro.id)  // el libro
                     listener.onBookClick(libro)
                 }
             }

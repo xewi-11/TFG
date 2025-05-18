@@ -26,7 +26,6 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         binding.fab.setOnClickListener { view ->
-
         }
 
         // Init Stripe
@@ -48,7 +47,13 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
                 || super.onSupportNavigateUp()
     }
     override fun onBookClick(libro: Libro) {
-        Snackbar.make(binding.root, "Libro seleccionado: ${libro.nombre}", Snackbar.LENGTH_SHORT).show()
+        findNavController(R.id.nav_host_fragment_content_main).navigate(
+            R.id.action_mainFragment_to_chatFragment,
+            Bundle().apply {
+                putString("idLibro",libro.id)
+                putString("idUsuario",libro.idUsuario)
+            }
+        )
     }
 
     override fun onConfirmacion(respuesta: Boolean) {
@@ -58,4 +63,9 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
             Snackbar.make(binding.root,"Error al seleccionar el usuario",Snackbar.LENGTH_LONG).show()
         }
     }
+
+    override fun onAddBook() {
+        findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_dialogProfileUser_to_addBookFragment)
+    }
+
 }

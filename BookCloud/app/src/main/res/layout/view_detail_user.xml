@@ -83,15 +83,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
             <Button
-                android:layout_marginTop="10dp"
                 android:id="@+id/btnGuardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guardar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+                app:layout_constraintTop_toBottomOf="@+id/recycledDetailsUser" />
+
+            <Button
+                android:id="@+id/btnAddLibro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Añadir Libro"
+                app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
                 app:layout_constraintTop_toBottomOf="@+id/recycledDetailsUser" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -20,7 +20,9 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.tasks.await
 import java.util.ArrayList
+import java.util.UUID
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -77,6 +79,28 @@ class MainFragment : Fragment(){
         }
 
     }
+
+    suspend fun añadirLibroParaVender(uid: String, libro: Libro) {
+        try {
+            val libroId = libro.id ?: UUID.randomUUID().toString()
+            libro.id = libroId
+            libro.idUsuario = uid
+
+            val updates = mapOf(
+                "/usuarios/$uid/librosEnVenta/$libroId" to libro,
+                "/libros/$libroId" to libro
+            )
+
+            database.reference
+                .updateChildren(updates)
+                .await()
+
+            println("Libro añadido correctamente en venta y en listado global.")
+        } catch (e: Exception) {
+            println("Error al añadir libro para vender: ${e.message}")
+        }
+    }
+
     fun cogerLibros(){
         database.reference.child("libros").addChildEventListener(
             object : ChildEventListener {

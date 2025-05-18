@@ -18,8 +18,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.bookcloud.AddBookFragment
 import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.R
+import com.example.bookcloud.model.Libro
 import com.example.bookcloud.model.Usuario
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +42,7 @@ class DialogProfileUser : DialogFragment() {
     private lateinit var listener: onRequestConfirmacion
     private lateinit var btnFoto: ShapeableImageView
     private lateinit var btnActualizar: Button
+    private lateinit var btnAddLibro: Button
     var passwordVisible = false
 
     private var imageUri: Uri? = null
@@ -84,6 +87,7 @@ class DialogProfileUser : DialogFragment() {
         textPassword = vista.findViewById(R.id.editTextPassword)
         btnFoto = vista.findViewById(R.id.btnFoto)
         btnActualizar = vista.findViewById(R.id.btnGuardar)
+        btnAddLibro = vista.findViewById(R.id.btnAddLibro)
 
         btnFoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -92,6 +96,9 @@ class DialogProfileUser : DialogFragment() {
         }
         btnActualizar.setOnClickListener {
             actualizarPerfil()
+        }
+        btnAddLibro.setOnClickListener {
+            listener.onAddBook()
         }
         cogerPerfil()
         textPassword.setOnTouchListener { v, event ->
@@ -218,5 +225,6 @@ class DialogProfileUser : DialogFragment() {
 
     interface onRequestConfirmacion {
         fun onConfirmacion(respuesta: Boolean)
+        fun onAddBook()
     }
 }

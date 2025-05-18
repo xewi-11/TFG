@@ -3,11 +3,12 @@ package com.example.bookcloud
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookcloud.adapter.AdapterMessage
@@ -18,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ChatFragment : AppCompatActivity() {
+class ChatFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdapterMessage
     private lateinit var editMessage: EditText
@@ -30,32 +31,47 @@ class ChatFragment : AppCompatActivity() {
     private val messages = mutableListOf<Map<String, Any>>()
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "user1"
-    private val otherUserId = "user2" // Este debería ser dinámico (por intent, etc.)
+    private lateinit var otherUserId: String
+    private lateinit var bookId: String
+    private lateinit var chatId: String
 
     private fun generateChatId(user1: String, user2: String): String {
         return listOf(user1, user2).sorted().joinToString("_")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_chat, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        FirebaseApp.initializeApp(requireContext())
         db = FirebaseFirestore.getInstance()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-        setContentView(R.layout.fragment_chat)
+        recyclerView = view.findViewById(R.id.recyclerMessages)
+        editMessage = view.findViewById(R.id.editMessage)
+        btnSend = view.findViewById(R.id.btnSend)
+        btnLocation = view.findViewById(R.id.btnLocation)
 
-        recyclerView = findViewById(R.id.recyclerMessages)
-        editMessage = findViewById(R.id.editMessage)
-        btnSend = findViewById(R.id.btnSend)
-        btnLocation = findViewById(R.id.btnLocation)
+        // Recibir argumentos desde MainActivity o adaptador
+        arguments?.let {
+            otherUserId = it.getString("ownerId") ?: return
+            bookId = it.getString("bookId") ?: return
+        }
+
+        chatId = generateChatId(currentUserId, otherUserId)
 
         adapter = AdapterMessage(messages, currentUserId)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
-        val chatId = generateChatId(currentUserId, otherUserId)
-
-        // 🔁 Escuchar mensajes en tiempo real
+        // 🔁 Escuchar mensajes
         db.collection("chats")
             .document(chatId)
             .collection("messages")
@@ -71,7 +87,7 @@ class ChatFragment : AppCompatActivity() {
                 recyclerView.scrollToPosition(messages.size - 1)
             }
 
-        // ✉️ Enviar texto
+        // ✉️ Enviar mensaje
         btnSend.setOnClickListener {
             val msg = editMessage.text.toString().trim()
             if (msg.isNotEmpty()) {
@@ -95,12 +111,12 @@ class ChatFragment : AppCompatActivity() {
         // 📍 Enviar ubicación
         btnLocation.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(
-                    this,
+                    requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                    this,
+                    requireActivity(),
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     1001
                 )
@@ -123,7 +139,7 @@ class ChatFragment : AppCompatActivity() {
 
                     saveChatReference(currentUserId, otherUserId, chatId)
                     saveChatReference(otherUserId, currentUserId, chatId)
-                } ?: Toast.makeText(this, "Ubicación no disponible", Toast.LENGTH_SHORT).show()
+                } ?: Toast.makeText(requireContext(), "Ubicación no disponible", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -139,5 +155,17 @@ class ChatFragment : AppCompatActivity() {
             .collection("chats")
             .document(chatId)
             .set(ref)
+    }
+
+    companion object {
+        fun newInstance(ownerId: String, bookId: String): ChatFragment {
+            val fragment = ChatFragment()
+            val args = Bundle().apply {
+                putString("ownerId", ownerId)
+                putString("bookId", bookId)
+            }
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

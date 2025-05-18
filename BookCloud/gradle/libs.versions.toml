@@ -20,6 +20,8 @@ volley = "1.2.1"
 volleyVersion = "1.2.1"
 firebaseFirestoreKtx = "25.1.3"
 firebaseFirestore = "25.1.4"
+firebaseStorageKtx = "21.0.1"
+activityKtx = "1.8.0"
 playServicesLocation = "21.3.0"
 
 
@@ -42,6 +44,8 @@ stripe-android = { module = "com.stripe:stripe-android", version.ref = "financia
 volley = { group = "com.android.volley", name = "volley", version.ref = "volleyVersion" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

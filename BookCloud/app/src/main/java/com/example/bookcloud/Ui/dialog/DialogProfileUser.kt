@@ -199,12 +199,12 @@ class DialogProfileUser : DialogFragment() {
             }
         }
     }
+
     private fun actualizarPerfil() {
         val nombre = textNombre.text.toString().takeIf { it.isNotBlank() }
         val apellido = textApellido.text.toString().takeIf { it.isNotBlank() }
         val correo = textCorreo.text.toString().takeIf { it.isNotBlank() }
         val password = textPassword.text.toString().takeIf { it.isNotBlank() }
-
 
         val userId = auth.currentUser?.uid ?: return
 
@@ -220,8 +220,6 @@ class DialogProfileUser : DialogFragment() {
             listener.onConfirmacion(actualizado)
         }
     }
-
-
 
     interface onRequestConfirmacion {
         fun onConfirmacion(respuesta: Boolean)

@@ -46,15 +46,15 @@ class RegisterFragment : Fragment() {
               auth.createUserWithEmailAndPassword(binding.editCorreo.text.toString(), binding.editPass.text.toString())
                   .addOnCompleteListener {
                       if (it.isSuccessful) {
-                          val usuario = Usuario(auth.currentUser!!.uid,
-                              binding.editNombre.text.toString(),
-                                binding.editApellido.text.toString(),
-                              binding.editCorreo.text.toString(),
-                              binding.editPass.text.toString(),
-                              null,
-                              arrayListOf(),
-                              arrayListOf(),
-                              arrayListOf(),
+                          val usuario = Usuario(
+                              uid = auth.currentUser!!.uid,
+                              nombre = binding.editNombre.text.toString(),
+                              apellido = binding.editApellido.text.toString(),
+                              correo = binding.editCorreo.text.toString(),
+                              password = binding.editPass.text.toString(),
+                              ftoPerfil = null,
+                              librosCarrito = null,
+                              librosFavoritos = null
                           )
                           val reference = database.reference.child("usuarios").child(auth.currentUser!!.uid)
                           reference.setValue(usuario).addOnCompleteListener {

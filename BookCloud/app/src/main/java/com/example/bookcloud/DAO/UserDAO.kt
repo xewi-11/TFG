@@ -49,6 +49,7 @@ class UserDAO(val context: Context) {
             null
         }
     }
+
     suspend fun updateUser(uid: String, nombre: String? = null, apellido: String? = null, correo: String? = null, password: String? = null): Boolean {
         return try {
             val updates = mutableMapOf<String, Any?>()
@@ -74,19 +75,21 @@ class UserDAO(val context: Context) {
             false
         }
     }
-        suspend fun añadirLibrosCarrito(uid: String, libro: Libro) {
-            try {
-                database.reference
-                    .child("usuarios")
-                    .child(uid)
-                    .child("librosCarrito")
-                    .child(libro.id.toString())
-                    .setValue(libro)
-                    .await()
-            } catch (e: Exception) {
-                println("Error al añadir libro al carrito: ${e.message}")
-            }
+
+    suspend fun añadirLibrosCarrito(uid: String, libro: Libro) {
+        try {
+            database.reference
+                .child("usuarios")
+                .child(uid)
+                .child("librosCarrito")
+                .child(libro.id.toString())
+                .setValue(libro)
+                .await()
+        } catch (e: Exception) {
+            println("Error al añadir libro al carrito: ${e.message}")
         }
+    }
+
     suspend fun añadirLibroAFavoritos(uid: String, libro: Libro) {
         try {
             database.reference
@@ -101,4 +104,3 @@ class UserDAO(val context: Context) {
         }
     }
 }
-

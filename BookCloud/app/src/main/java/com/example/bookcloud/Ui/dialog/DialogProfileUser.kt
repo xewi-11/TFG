@@ -185,6 +185,13 @@ class DialogProfileUser : DialogFragment() {
                 textCorreo.setText(usuario.correo)
                 textPassword.setText(usuario.password)
 
+                // Cargar libros publicados si existen
+                usuario.librosPublicados?.let { libros ->
+                    libros.forEach { (id, libro) ->
+                        Log.d("LibrosPublicados", "Libro: ${libro.nombre}, ID: $id")
+                    }
+                }
+
                 // Cargar imagen si ya hay una
                 if (!usuario.ftoPerfil.isNullOrEmpty()) {
                     Glide.with(requireContext())

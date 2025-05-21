@@ -54,7 +54,8 @@ class RegisterFragment : Fragment() {
                               password = binding.editPass.text.toString(),
                               ftoPerfil = null,
                               librosCarrito = null,
-                              librosFavoritos = null
+                              librosFavoritos = null,
+                              librosPublicados = null
                           )
                           val reference = database.reference.child("usuarios").child(auth.currentUser!!.uid)
                           reference.setValue(usuario).addOnCompleteListener {

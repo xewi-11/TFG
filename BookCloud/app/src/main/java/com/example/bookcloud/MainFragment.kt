@@ -20,6 +20,8 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.ArrayList
 import java.util.UUID
@@ -79,65 +81,42 @@ class MainFragment : Fragment(){
         }
 
     }
+    fun cogerLibros() {
+        val db = FirebaseFirestore.getInstance()
 
-    suspend fun añadirLibroParaVender(uid: String, libro: Libro) {
-        try {
-            val libroId = libro.id ?: UUID.randomUUID().toString()
-            libro.id = libroId
-            libro.idUsuario = uid
+        db.collection("books").addSnapshotListener { snapshots, e ->
+            if (e != null) {
+                Log.w("Firestore", "Listen failed.", e)
+                return@addSnapshotListener
+            }
 
-            val updates = mapOf(
-                "/usuarios/$uid/librosEnVenta/$libroId" to libro,
-                "/libros/$libroId" to libro
-            )
-
-            database.reference
-                .updateChildren(updates)
-                .await()
-
-            println("Libro añadido correctamente en venta y en listado global.")
-        } catch (e: Exception) {
-            println("Error al añadir libro para vender: ${e.message}")
-        }
-    }
-
-    fun cogerLibros(){
-        database.reference.child("libros").addChildEventListener(
-            object : ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val libro = snapshot.getValue(Libro::class.java) as Libro
-                    listaLibros.add(libro)
-                    adapterLibros.notifyDataSetChanged()
-                    Log.v("libros", listaLibros.toString())
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val libro = snapshot.getValue(Libro::class.java) as Libro
-                    val index = listaLibros.indexOfFirst { it.id == libro.id }
-                    if (index != -1) {
-                        listaLibros[index] = libro
-                        adapterLibros.notifyItemChanged(index)
+            if (snapshots != null) {
+                for (dc in snapshots.documentChanges) {
+                    val libro = dc.document.toObject(Libro::class.java)
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            listaLibros.add(libro)
+                            adapterLibros.notifyDataSetChanged()
+                            Log.v("libros", listaLibros.toString())
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            val index = listaLibros.indexOfFirst { it.id == libro.id }
+                            if (index != -1) {
+                                listaLibros[index] = libro
+                                adapterLibros.notifyItemChanged(index)
+                            }
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            val index = listaLibros.indexOfFirst { it.id == libro.id }
+                            if (index != -1) {
+                                listaLibros.removeAt(index)
+                                adapterLibros.notifyItemRemoved(index)
+                            }
+                        }
                     }
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    val libro = snapshot.getValue(Libro::class.java) as Libro
-                    val index = listaLibros.indexOfFirst { it.id == libro.id }
-                    if (index != -1) {
-                        listaLibros.removeAt(index)
-                        adapterLibros.notifyItemRemoved(index)
-                    }
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    // No se utiliza en este caso
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Manejar el error si es necesario
                 }
             }
-        )
+        }
     }
 
     override fun onDestroyView() {

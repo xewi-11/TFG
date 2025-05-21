@@ -8,9 +8,13 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.bookcloud.DAO.UserDAO
+import com.example.bookcloud.model.Libro
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AddBookFragment : Fragment() {
@@ -24,6 +28,7 @@ class AddBookFragment : Fragment() {
     private lateinit var btnGuardar: Button
     private lateinit var btnSelectImage: Button
     private lateinit var imagePreview: ImageView
+    private lateinit var userDAO: UserDAO
 
     private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "user1"
     private lateinit var db: FirebaseFirestore
@@ -47,7 +52,7 @@ class AddBookFragment : Fragment() {
 
         db = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
-
+        userDAO = UserDAO(requireContext())
         editId = view.findViewById(R.id.editId)
         editNombre = view.findViewById(R.id.editNombre)
         editAutor = view.findViewById(R.id.editAutor)
@@ -121,9 +126,14 @@ class AddBookFragment : Fragment() {
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "Libro guardado con imagen", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
+
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Error al guardar el libro", Toast.LENGTH_SHORT).show()
             }
+
+        lifecycleScope.launch {
+            userDAO.añadirLibroPublicado(currentUserId,libro as Libro)
+        }
     }
 }

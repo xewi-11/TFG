@@ -7,8 +7,10 @@ data class Usuario(
     var correo: String? = null,
     var password: String? = null,
     var ftoPerfil: String? = null,
-    val librosCarrito: Map<String, Libro>? = null,
-    val librosFavoritos: Map<String, Libro>? = null
+    var librosCarrito: Map<String, Libro>? = null,
+    var librosFavoritos: Map<String, Libro>? = null,
+    var librosPublicados: Map<String, Libro>? = null // Nueva propiedad
 ) {
-    constructor() : this(null, null, null, null, null, null, null, null)
+    constructor() : this(null, null, null, null, null, null, null, null, null)
 }
+

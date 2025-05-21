@@ -103,4 +103,18 @@ class UserDAO(val context: Context) {
             println("Error al añadir libro a favoritos: ${e.message}")
         }
     }
+    suspend fun añadirLibroPublicado(uid: String, libro: Libro) {
+        try {
+            if (uid.equals(libro.idUsuario)) {
+                database.reference
+                    .child("usuarios")
+                    .child(uid)
+                    .child("librosPublicados")
+                    .setValue(libro.id.toString())
+                    .await()
+            }
+        } catch (e: Exception) {
+            println("Error al añadir libro publicado: ${e.message}")
+        }
+    }
 }

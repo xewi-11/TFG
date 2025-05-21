@@ -9,25 +9,31 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.bookcloud.DAO.UserDAO
+import com.example.bookcloud.model.Pedido
+import com.google.firebase.auth.FirebaseAuth
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.Stripe
 import com.stripe.android.googlepaylauncher.GooglePayEnvironment
 import com.stripe.android.googlepaylauncher.GooglePayLauncher
 import com.stripe.android.model.ConfirmPaymentIntentParams
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class paymentFragment: Fragment() {
     private lateinit var stripe: Stripe
     private lateinit var googlePayLauncher: GooglePayLauncher
-
+    private lateinit var userDAO: UserDAO
     private lateinit var cardInputWidget: com.stripe.android.view.CardInputWidget
     private lateinit var googlePayButton: Button
     private lateinit var cardPayButton: Button
     private lateinit var nameInput: EditText
     private lateinit var emailInput: EditText
-
+    private lateinit var auth: FirebaseAuth
+    private lateinit var listaPedidos:ArrayList<Pedido>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +47,9 @@ class paymentFragment: Fragment() {
         // Init Stripe
         PaymentConfiguration.init(requireContext(), R.string.tokenStripe.toString())
         stripe = Stripe(requireContext(), PaymentConfiguration.getInstance(requireContext()).publishableKey)
-
+        userDAO = UserDAO(requireContext())
+        auth = FirebaseAuth.getInstance()
+        listaPedidos = arrayListOf()
         // UI refs
         cardInputWidget = view.findViewById(R.id.cardInputWidget)
         googlePayButton = view.findViewById(R.id.googlePayButton)
@@ -143,5 +151,20 @@ class paymentFragment: Fragment() {
 
     private fun mostrarError(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
+    }
+    private fun cogerPedido() {
+        lifecycleScope.launch {
+            try {
+                listaPedidos = userDAO.cogerPedidosRealizados(auth.uid.toString())!!
+                if (!listaPedidos.isNullOrEmpty()) {
+                    // Aquí puedes hacer lo que necesites con la lista de pedidos
+                    Log.d("Pedidos", "Pedidos obtenidos: $listaPedidos")
+                } else {
+                    Log.d("Pedidos", "No se encontraron pedidos")
+                }
+            } catch (e: Exception) {
+                Log.e("Pedidos", "Error al obtener los pedidos: ${e.message}")
+            }
+        }
     }
 }

@@ -31,8 +31,6 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         appBarConfiguration = AppBarConfiguration(navController.graph)
         userDAO = UserDAO(this)
         auth = FirebaseAuth.getInstance()
-        binding.fab.setOnClickListener { view ->
-        }
 
 
         // Init Stripe

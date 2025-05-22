@@ -48,8 +48,12 @@
         <action
             android:id="@+id/action_mainFragment_to_carritoFragment"
             app:destination="@id/carritoFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_chatListFragment"
             app:destination="@id/chatListFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_favoritosFragment"
+            app:destination="@id/favoritosFragment" />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
@@ -107,11 +111,21 @@
         <action
             android:id="@+id/action_carritoFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/chatListFragment"
         android:name="com.example.bookcloud.ChatListFragment"
         android:label="ChatListFragment" >
         <action
             android:id="@+id/action_chatListFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritosFragment"
+        android:name="com.example.bookcloud.FavoritosFragment"
+        android:label="FavoritosFragment" >
+        <action
+            android:id="@+id/action_favoritosFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

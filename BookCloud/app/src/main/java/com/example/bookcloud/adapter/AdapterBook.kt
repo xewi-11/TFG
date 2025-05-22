@@ -74,6 +74,7 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
                     intent.putExtra("bookId", libro.id)  // el libro
                     listener.onBookClick(libro)
                 }
+
             }
             true
         }

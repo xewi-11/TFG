@@ -9,7 +9,7 @@
     <!-- CARD -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="185dp"
+        android:layout_height="300dp"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@android:color/holo_blue_light">
 
@@ -27,6 +27,8 @@
                 android:layout_marginStart="10dp"/>
 
             <TextView
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textCarr"/>

@@ -78,7 +78,7 @@ class MainFragment : Fragment(){
                     true
                 }
                 R.id.menu_favoritos -> {
-                    // Puedes agregar lógica aquí si lo necesitas
+                    findNavController().navigate(R.id.action_mainFragment_to_favoritosFragment)
                     true
                 }
                 R.id.menu_chats -> {

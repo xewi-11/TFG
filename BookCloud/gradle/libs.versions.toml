@@ -23,6 +23,7 @@ firebaseFirestore = "25.1.4"
 firebaseStorageKtx = "21.0.1"
 activityKtx = "1.10.1"
 playServicesLocation = "21.3.0"
+roomRuntimeAndroid = "2.7.1"
 
 
 [libraries]
@@ -47,6 +48,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

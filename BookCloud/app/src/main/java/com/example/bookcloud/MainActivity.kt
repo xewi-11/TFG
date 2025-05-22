@@ -25,9 +25,6 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        binding.fab.setOnClickListener { view ->
-        }
-
         // Init Stripe
     }
 
@@ -50,8 +47,8 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         findNavController(R.id.nav_host_fragment_content_main).navigate(
             R.id.action_mainFragment_to_chatFragment,
             Bundle().apply {
-                putString("idLibro",libro.id)
-                putString("idUsuario",libro.idUsuario)
+                putString("bookId", libro.id)
+                putString("ownerId", libro.idUsuario)
             }
         )
     }

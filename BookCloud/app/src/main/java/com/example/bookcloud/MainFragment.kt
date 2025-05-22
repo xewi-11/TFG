@@ -64,7 +64,7 @@ class MainFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setOnMenuItemClickListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.menu_perfil -> {
                     findNavController().navigate(R.id.action_mainFragment_to_dialogProfileUser)
                     true
@@ -74,11 +74,17 @@ class MainFragment : Fragment(){
                     true
                 }
                 R.id.menu_favoritos -> {
+                    // Puedes agregar lógica aquí si lo necesitas
+                    true
+                }
+                R.id.menu_chats -> {
+                    findNavController().navigate(R.id.action_mainFragment_to_chatListFragment)
                     true
                 }
                 else -> false
             }
         }
+
 
     }
     fun cogerLibros() {

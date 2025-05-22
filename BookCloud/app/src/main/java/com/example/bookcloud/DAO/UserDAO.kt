@@ -117,4 +117,18 @@ class UserDAO(val context: Context) {
             println("Error al añadir libro publicado: ${e.message}")
         }
     }
+
+    suspend fun getUserById(uid: String): Usuario? {
+        return try {
+            val snapshot = database.reference
+                .child("usuarios")
+                .child(uid)
+                .get()
+                .await()
+            snapshot.getValue(Usuario::class.java)
+        } catch (e: Exception) {
+            println("Error al obtener usuario por UID: ${e.message}")
+            null
+        }
+    }
 }

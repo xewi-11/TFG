@@ -135,10 +135,6 @@ class UserDAO(val context: Context) {
         }
     }
     suspend fun cogerPedidosRealizados(uid: String): ArrayList<Pedido>? {
-
-
-    suspend fun getUserById(uid: String): Usuario? {
-
         return try {
             val snapshot = database.reference
                 .child("usuarios")
@@ -159,12 +155,38 @@ class UserDAO(val context: Context) {
             listaPedidos
         } catch (e: Exception) {
             println("Error al obtener pedidos realizados: ${e.message}")
-                .get()
-                .await()
-            snapshot.getValue(Usuario::class.java)
-        } catch (e: Exception) {
-            println("Error al obtener usuario por UID: ${e.message}")
             null
         }
     }
+
+    suspend fun getUserById(uid: String): Usuario? {
+        return try {
+            val userSnapshot = database.reference
+                .child("usuarios")
+                .child(uid)
+                .get()
+                .await()
+
+            if (!userSnapshot.exists()) return null
+
+            val nombre = userSnapshot.child("nombre").getValue(String::class.java) ?: ""
+            val email = userSnapshot.child("email").getValue(String::class.java) ?: ""
+
+            val pedidosSnapshot = userSnapshot.child("pedidosRealizados")
+            val listaPedidos = mutableListOf<Pedido>()
+
+            for (pedidoSnapshot in pedidosSnapshot.children) {
+                val libros = pedidoSnapshot.getValue(object : GenericTypeIndicator<ArrayList<Libro>>() {})
+                if (libros != null) {
+                    listaPedidos.add(Pedido(uid, libros, false))
+                }
+            }
+
+            Usuario(uid, nombre, email, listaPedidos.toString())
+        } catch (e: Exception) {
+            println("Error al obtener usuario: ${e.message}")
+            null
+        }
+    }
+
 }

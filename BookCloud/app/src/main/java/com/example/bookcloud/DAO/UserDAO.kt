@@ -119,6 +119,7 @@ class UserDAO(val context: Context) {
             println("Error al añadir libro publicado: ${e.message}")
         }
     }
+
     suspend fun añadirPedidoRealizado(uid: String, libros: ArrayList<Libro>) {
         var numeroPedidos=0
         try {
@@ -134,6 +135,10 @@ class UserDAO(val context: Context) {
         }
     }
     suspend fun cogerPedidosRealizados(uid: String): ArrayList<Pedido>? {
+
+
+    suspend fun getUserById(uid: String): Usuario? {
+
         return try {
             val snapshot = database.reference
                 .child("usuarios")
@@ -154,6 +159,11 @@ class UserDAO(val context: Context) {
             listaPedidos
         } catch (e: Exception) {
             println("Error al obtener pedidos realizados: ${e.message}")
+                .get()
+                .await()
+            snapshot.getValue(Usuario::class.java)
+        } catch (e: Exception) {
+            println("Error al obtener usuario por UID: ${e.message}")
             null
         }
     }

@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.play.services.location)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

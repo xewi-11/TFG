@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menu_perfil"
         android:title="Perfil"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/gente"/>
+        android:icon="@drawable/gente" />
+
     <item
-        app:showAsAction="ifRoom"
         android:id="@+id/menu_carrito"
         android:title="Carrito"
-        android:icon="@drawable/buscar"/>
-    <item
         app:showAsAction="ifRoom"
+        android:icon="@drawable/buscar" />
+
+    <item
         android:id="@+id/menu_favoritos"
         android:title="Favoritos"
-        android:icon="@drawable/favorito"/>
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_chats"
+        android:title="Chats"
+        app:showAsAction="ifRoom"
+        />
 </menu>

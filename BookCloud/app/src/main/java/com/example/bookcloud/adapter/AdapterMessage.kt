@@ -11,14 +11,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookcloud.R
+import com.example.bookcloud.model.Message
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AdapterMessage(
-    private val messages: List<Map<String, Any>>,
+    private val messages: List<Message>,
     private val currentUserId: String
 ) : RecyclerView.Adapter<AdapterMessage.MessageViewHolder>() {
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textMessage: TextView = itemView.findViewById(R.id.textMessage)
+        val textTimestamp: TextView = itemView.findViewById(R.id.textTimestamp)
         val layout: LinearLayout = itemView as LinearLayout
     }
 
@@ -29,14 +33,11 @@ class AdapterMessage(
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val messageMap = messages[position]
-        val messageText = messageMap["text"] as? String ?: ""
-        val senderId = messageMap["senderId"] as? String ?: ""
+        val message = messages[position]
+        val isSender = message.senderId == currentUserId
 
-        val isSender = senderId == currentUserId
         val params = holder.textMessage.layoutParams as LinearLayout.LayoutParams
 
-        // Estilo y alineación
         if (isSender) {
             params.gravity = Gravity.END
             holder.textMessage.setBackgroundColor(Color.parseColor("#03A9F4"))
@@ -48,13 +49,22 @@ class AdapterMessage(
         }
 
         holder.textMessage.layoutParams = params
-        holder.textMessage.text = messageText
+        holder.textMessage.text = message.text
 
-        // Si es una ubicación, abrir en mapa
-        if (messageText.contains("maps.google.com")) {
+        // Mostrar hora si existe timestamp
+        message.timestamp?.let {
+            val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val date = it.toDate()
+            holder.textTimestamp.text = sdf.format(date)
+        } ?: run {
+            holder.textTimestamp.text = ""
+        }
+
+        // Enlace a ubicación
+        if (message.text.contains("maps.google.com")) {
             holder.textMessage.setTextColor(Color.BLUE)
             holder.textMessage.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(messageText))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message.text))
                 it.context.startActivity(intent)
             }
         } else {

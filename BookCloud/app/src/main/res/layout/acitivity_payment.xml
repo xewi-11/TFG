@@ -21,6 +21,16 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
+        <!-- Total a pagar -->
+        <TextView
+            android:id="@+id/totalPriceText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total: 0.00€"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
 
         <!-- Nombre del cliente -->
         <EditText

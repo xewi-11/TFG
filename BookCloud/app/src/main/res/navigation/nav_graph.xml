@@ -59,9 +59,17 @@
         android:id="@+id/paymentFragment"
         android:name="com.example.bookcloud.paymentFragment"
         android:label="paymentFragment" >
+        <argument
+            android:name="libros"
+            app:argType="com.example.bookcloud.model.Libro[]"
+            android:defaultValue="@null"
+            app:nullable="true" />
         <action
             android:id="@+id/action_paymentFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_carritoFragment"
+            app:destination="@id/carritoFragment" />
     </fragment>
     <dialog
         android:id="@+id/dialogProfileUser"
@@ -111,6 +119,14 @@
         <action
             android:id="@+id/action_carritoFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_carritoFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment">
+                <argument
+                    android:name="libros"
+                    app:argType="com.example.bookcloud.model.Libro[]" />
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/chatListFragment"

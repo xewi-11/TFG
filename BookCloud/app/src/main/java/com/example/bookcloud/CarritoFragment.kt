@@ -68,11 +68,14 @@ class CarritoFragment : Fragment() {
                 val seleccionados = adapterCarritoFav.listaSeleccionados
                 if (seleccionados.isNotEmpty()) {
                     try {
+                        // Guardar pedido en la base de datos
                         userDAO.añadirPedidoRealizado(auth.uid.toString(), ArrayList(seleccionados))
                         Snackbar.make(view, "Pedido realizado correctamente", Snackbar.LENGTH_LONG).show()
-                        findNavController().navigate(R.id.action_mainFragment_to_paymentFragment)
+                        // Ir al fragmento de pago, pasando los libros seleccionados
+                        val action = CarritoFragmentDirections.actionCarritoFragmentToPaymentFragment(seleccionados.toTypedArray())
+                        findNavController().navigate(action)
                     } catch (e: Exception) {
-                        Snackbar.make(view, "Error al realizar el pedido: ${e.message}", Snackbar.LENGTH_LONG).show()
+                       Log.v("error",e.toString())
                     }
                 } else {
                     Snackbar.make(view, "Selecciona al menos un libro", Snackbar.LENGTH_SHORT).show()

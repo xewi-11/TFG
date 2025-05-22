@@ -7,23 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.bookcloud.DAO.UserDAO
+import com.example.bookcloud.model.Libro
 import com.example.bookcloud.model.Pedido
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.Stripe
 import com.stripe.android.googlepaylauncher.GooglePayEnvironment
 import com.stripe.android.googlepaylauncher.GooglePayLauncher
 import com.stripe.android.model.ConfirmPaymentIntentParams
-import kotlinx.coroutines.launch
 import org.json.JSONObject
+import com.example.bookcloud.paymentFragmentArgs
 
-class paymentFragment: Fragment() {
+class paymentFragment : Fragment() {
+
     private lateinit var stripe: Stripe
     private lateinit var googlePayLauncher: GooglePayLauncher
     private lateinit var userDAO: UserDAO
@@ -32,32 +37,44 @@ class paymentFragment: Fragment() {
     private lateinit var cardPayButton: Button
     private lateinit var nameInput: EditText
     private lateinit var emailInput: EditText
+    private lateinit var totalPriceText: TextView
     private lateinit var auth: FirebaseAuth
-    private lateinit var listaPedidos:ArrayList<Pedido>
+    private lateinit var listaPedidos: ArrayList<Pedido>
+    private lateinit var librosSeleccionados: List<Libro>
+    private var totalPago: Double = 0.0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val publishableKey = getString(R.string.tokenStripe)
+        PaymentConfiguration.init(requireContext().applicationContext, publishableKey)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.acitivity_payment, container, false)
-    }
+    ): View = inflater.inflate(R.layout.acitivity_payment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Init Stripe
-        PaymentConfiguration.init(requireContext(), R.string.tokenStripe.toString())
+        val args = paymentFragmentArgs.fromBundle(requireArguments())
+        librosSeleccionados = args.libros?.toList() ?: emptyList()
+        totalPago = librosSeleccionados.sumOf { it.precio?.toDoubleOrNull() ?: 0.0 }
+
+        totalPriceText = view.findViewById(R.id.totalPriceText)
+        totalPriceText.text = "Total: $%.2f".format(totalPago)
+
         stripe = Stripe(requireContext(), PaymentConfiguration.getInstance(requireContext()).publishableKey)
         userDAO = UserDAO(requireContext())
         auth = FirebaseAuth.getInstance()
         listaPedidos = arrayListOf()
-        // UI refs
+
         cardInputWidget = view.findViewById(R.id.cardInputWidget)
         googlePayButton = view.findViewById(R.id.googlePayButton)
         cardPayButton = view.findViewById(R.id.cardPayButton)
         nameInput = view.findViewById(R.id.customerName)
         emailInput = view.findViewById(R.id.customerEmail)
 
-        // Google Pay Setup
         googlePayLauncher = GooglePayLauncher(
             fragment = this,
             config = GooglePayLauncher.Config(
@@ -102,6 +119,9 @@ class paymentFragment: Fragment() {
                 val confirmParams = ConfirmPaymentIntentParams
                     .createWithPaymentMethodCreateParams(params, clientSecret)
                 stripe.confirmPayment(requireActivity(), confirmParams)
+
+                // ✅ Siempre vacía el carrito y vuelve al main
+                vaciarCarritoYVolver()
             } else {
                 mostrarError("No se pudo obtener el clientSecret")
             }
@@ -112,6 +132,7 @@ class paymentFragment: Fragment() {
         when (result) {
             is GooglePayLauncher.Result.Completed -> {
                 Toast.makeText(requireContext(), "✅ Pago completado con Google Pay", Toast.LENGTH_LONG).show()
+                vaciarCarritoYVolver()
             }
             is GooglePayLauncher.Result.Canceled -> {
                 Toast.makeText(requireContext(), "Pago cancelado", Toast.LENGTH_SHORT).show()
@@ -122,13 +143,41 @@ class paymentFragment: Fragment() {
         }
     }
 
-    private fun obtenerClientSecret(callback: (String?) -> Unit) {
-        val url =
-            "https://stripe-backend-s5cg.onrender.com/create-payment-intent"
+    private fun vaciarCarritoYVolver() {
+        val userId = auth.currentUser?.uid ?: return
 
-        val json = JSONObject()
-        json.put("amount", 5000)
-        json.put("currency", "usd")
+        val dbRef = FirebaseDatabase
+            .getInstance("https://bookcloud-440ad-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("usuarios")
+            .child(userId)
+            .child("librosCarrito")
+
+        dbRef.removeValue().addOnCompleteListener {
+            val mensaje = if (it.isSuccessful) {
+                "Compra realizada"
+            } else {
+                "Compra realizada (no se pudo vaciar el carrito)"
+            }
+
+            Snackbar.make(requireView(), mensaje, Snackbar.LENGTH_LONG).show()
+
+            // Volver al mainFragment después de 1 segundo
+            view?.postDelayed({
+                requireActivity()
+                    .findNavController(R.id.nav_host_fragment_content_main)
+                    .navigate(R.id.action_paymentFragment_to_mainFragment)
+            }, 1000)
+        }
+    }
+
+    private fun obtenerClientSecret(callback: (String?) -> Unit) {
+        val url = "https://stripe-backend-s5cg.onrender.com/create-payment-intent"
+        val amountInCents = (totalPago * 100).toInt()
+
+        val json = JSONObject().apply {
+            put("amount", amountInCents)
+            put("currency", "usd")
+        }
 
         val queue = Volley.newRequestQueue(requireContext())
         val request = object : JsonObjectRequest(
@@ -151,20 +200,5 @@ class paymentFragment: Fragment() {
 
     private fun mostrarError(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-    }
-    private fun cogerPedido() {
-        lifecycleScope.launch {
-            try {
-                listaPedidos = userDAO.cogerPedidosRealizados(auth.uid.toString())!!
-                if (!listaPedidos.isNullOrEmpty()) {
-                    // Aquí puedes hacer lo que necesites con la lista de pedidos
-                    Log.d("Pedidos", "Pedidos obtenidos: $listaPedidos")
-                } else {
-                    Log.d("Pedidos", "No se encontraron pedidos")
-                }
-            } catch (e: Exception) {
-                Log.e("Pedidos", "Error al obtener los pedidos: ${e.message}")
-            }
-        }
     }
 }

@@ -9,8 +9,8 @@ data class Usuario(
     var ftoPerfil: String? = null,
     var librosCarrito: Map<String, Libro>? = null,
     var librosFavoritos: Map<String, Libro>? = null,
-    var librosPublicados: Map<String, Libro>? = null // Nueva propiedad
+    var librosPublicados: Map<String, Libro>? = null, // Nueva propiedad
+    var pedidos: ArrayList<String>? = null // Nueva propiedad
 ) {
-    constructor() : this(null, null, null, null, null, null, null, null, null)
+    constructor() : this(null, null, null, null, null, null, null, null, null, null)
 }
-

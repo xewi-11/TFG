@@ -49,18 +49,5 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- BOTÓN COMPRAR -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:padding="10dp">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnComprar"
-            android:text="Comprar"/>
-    </LinearLayout>
 
 </LinearLayout>

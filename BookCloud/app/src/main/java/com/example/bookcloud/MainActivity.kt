@@ -16,7 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfileUser.onRequestConfirmacion,AdapterCarritoFav.OnBookSaleListener {
+class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfileUser.onRequestConfirmacion {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userDAO: UserDAO
@@ -74,16 +74,6 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_dialogProfileUser_to_addBookFragment)
     }
 
-    override fun onBookSale(libros: ArrayList<Libro>) {
-        lifecycleScope.launch {
-            try {
-                userDAO.añadirPedidoRealizado(auth.uid.toString(), libros)
-                Snackbar.make(binding.root, "Libro añadido correctamente", Snackbar.LENGTH_LONG).show()
-                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_mainFragment_to_paymentFragment)
-            } catch (e: Exception) {
-                Snackbar.make(binding.root, "Error al añadir el libro: ${e.message}", Snackbar.LENGTH_LONG).show()
-            }
-        }
-    }
+
 
 }

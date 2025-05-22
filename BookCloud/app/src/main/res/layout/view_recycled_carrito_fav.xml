@@ -2,42 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- CARD -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="185dp"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@android:color/holo_blue_light">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
-            android:text="Comprar"
-            android:layout_gravity="left"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textCarr"/>
-        <ImageView
-            android:layout_marginTop="25dp"
-            android:layout_gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageCard"
-            tools:src="@android:drawable/ic_input_get"/>
-        <Button
-            android:layout_marginTop="130dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnDelete"
-            android:text="Eliminar"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox"
+                android:text="Comprar"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textCarr"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageCard"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                tools:src="@android:drawable/ic_input_get"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnDelete"
+                android:text="Eliminar"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"/>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

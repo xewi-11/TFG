@@ -14,6 +14,7 @@ import com.example.bookcloud.adapter.AdapterBook
 import com.example.bookcloud.databinding.FragmentLoginBinding
 import com.example.bookcloud.databinding.FragmentMainBinding
 import com.example.bookcloud.model.Libro
+import com.example.navegacion.adapter.AdapterCarritoFav
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -36,6 +37,7 @@ class MainFragment : Fragment(){
     private lateinit var toolbar: Toolbar
     private lateinit var listaLibros: ArrayList<Libro>
     private lateinit var adapterLibros: AdapterBook
+    private lateinit var adapterCarritoFav: AdapterCarritoFav
     private lateinit var database: FirebaseDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +61,8 @@ class MainFragment : Fragment(){
         adapterLibros = AdapterBook(listaLibros,requireContext())
         binding.recycledMain.adapter=adapterLibros
         adapterLibros.notifyDataSetChanged()
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,7 +74,7 @@ class MainFragment : Fragment(){
                     true
                 }
                 R.id.menu_carrito -> {
-                    findNavController().navigate(R.id.action_mainFragment_to_paymentFragment)
+                    findNavController().navigate(R.id.action_mainFragment_to_carritoFragment)
                     true
                 }
                 R.id.menu_favoritos -> {

@@ -2,9 +2,11 @@ package com.example.bookcloud.DAO
 
 import android.content.Context
 import com.example.bookcloud.model.Libro
+import com.example.bookcloud.model.Pedido
 import com.example.bookcloud.model.Usuario
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.GenericTypeIndicator
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -118,11 +120,45 @@ class UserDAO(val context: Context) {
         }
     }
 
+    suspend fun añadirPedidoRealizado(uid: String, libros: ArrayList<Libro>) {
+        var numeroPedidos=0
+        try {
+            database.reference
+                .child("usuarios")
+                .child(uid)
+                .child("pedidosRealizados")
+                .child((numeroPedidos+1).toString())
+                .setValue(libros)
+                .await()
+        } catch (e: Exception) {
+            println("Error al añadir pedido realizado: ${e.message}")
+        }
+    }
+    suspend fun cogerPedidosRealizados(uid: String): ArrayList<Pedido>? {
+
+
     suspend fun getUserById(uid: String): Usuario? {
+
         return try {
             val snapshot = database.reference
                 .child("usuarios")
                 .child(uid)
+                .child("pedidosRealizados")
+                .get()
+                .await()
+
+            val listaPedidos = ArrayList<Pedido>()
+
+            for (pedidoSnapshot in snapshot.children) {
+                val libros = pedidoSnapshot.getValue(object : GenericTypeIndicator<ArrayList<Libro>>() {})
+                if (libros != null) {
+                    listaPedidos.add(Pedido(uid, libros, false))
+                }
+            }
+
+            listaPedidos
+        } catch (e: Exception) {
+            println("Error al obtener pedidos realizados: ${e.message}")
                 .get()
                 .await()
             snapshot.getValue(Usuario::class.java)

@@ -3,19 +3,24 @@ package com.example.bookcloud
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.bookcloud.DAO.UserDAO
 import com.example.bookcloud.Ui.dialog.DialogProfileUser
 import com.example.bookcloud.adapter.AdapterBook
 import com.example.bookcloud.databinding.ActivityMainBinding
 import com.example.bookcloud.model.Libro
+import com.example.navegacion.adapter.AdapterCarritoFav
 import com.google.android.material.snackbar.Snackbar
-import com.stripe.android.PaymentConfiguration
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfileUser.onRequestConfirmacion {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var userDAO: UserDAO
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,6 +29,11 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
+        userDAO = UserDAO(this)
+        auth = FirebaseAuth.getInstance()
+        binding.fab.setOnClickListener { view ->
+        }
+
 
         // Init Stripe
     }
@@ -64,5 +74,7 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
     override fun onAddBook() {
         findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_dialogProfileUser_to_addBookFragment)
     }
+
+
 
 }

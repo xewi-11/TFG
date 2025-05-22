@@ -46,6 +46,8 @@
             android:id="@+id/action_mainFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_carritoFragment"
+            app:destination="@id/carritoFragment" />
             android:id="@+id/action_mainFragment_to_chatListFragment"
             app:destination="@id/chatListFragment" />
     </fragment>
@@ -99,6 +101,12 @@
             app:destination="@id/dialogProfileUser" />
     </fragment>
     <fragment
+        android:id="@+id/carritoFragment"
+        android:name="com.example.bookcloud.CarritoFragment"
+        android:label="CarritoFragment" >
+        <action
+            android:id="@+id/action_carritoFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
         android:id="@+id/chatListFragment"
         android:name="com.example.bookcloud.ChatListFragment"
         android:label="ChatListFragment" >

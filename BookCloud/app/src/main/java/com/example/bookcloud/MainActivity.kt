@@ -61,6 +61,16 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
         )
     }
 
+    override fun onBookDetailClicK(libro: Libro) {
+        val bundle = Bundle().apply {
+            putParcelable("libro", libro)
+        }
+        findNavController(R.id.nav_host_fragment_content_main).navigate(
+            R.id.action_mainFragment_to_detailFragment,
+            bundle
+        )
+    }
+
     override fun onConfirmacion(respuesta: Boolean) {
         if(respuesta){
             Snackbar.make(binding.root,"Usuario Seleccionado correctamente",Snackbar.LENGTH_LONG).show()
@@ -72,9 +82,4 @@ class MainActivity: AppCompatActivity(),AdapterBook.OnBookListener,DialogProfile
     override fun onAddBook() {
         findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_dialogProfileUser_to_addBookFragment)
     }
-
-
-
-
-
 }

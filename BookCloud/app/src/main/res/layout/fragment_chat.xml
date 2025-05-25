@@ -47,14 +47,13 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Botón ubicación -->
-        <Button
+        <ImageButton
             android:id="@+id/btnLocation"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:text="📍"
-            android:backgroundTint="#E0E0E0"
             android:layout_marginEnd="8dp"
             android:elevation="4dp"
+            android:background="@drawable/mapa"
             app:layout_constraintStart_toEndOf="@id/editMessage"
             app:layout_constraintEnd_toStartOf="@id/btnSend"
             app:layout_constraintTop_toTopOf="parent"

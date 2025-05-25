@@ -110,15 +110,15 @@ class AddBookFragment : Fragment() {
         categoria: String,
         fotoUrl: String?
     ) {
-        val libro = hashMapOf(
-            "id" to id,
-            "idUsuario" to currentUserId,
-            "nombre" to nombre,
-            "autor" to autor,
-            "precio" to precio,
-            "descripcion" to descripcion,
-            "categoria" to categoria,
-            "foto" to fotoUrl
+        val libro = Libro(
+            id = id,
+            idUsuario = currentUserId,
+            nombre = nombre,
+            autor = autor,
+            precio = precio,
+            descripcion = descripcion,
+            categoria = categoria,
+            foto = fotoUrl
         )
 
         db.collection("books").document(id)
@@ -126,14 +126,13 @@ class AddBookFragment : Fragment() {
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "Libro guardado con imagen", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
-
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Error al guardar el libro", Toast.LENGTH_SHORT).show()
             }
 
         lifecycleScope.launch {
-            userDAO.añadirLibroPublicado(currentUserId,libro as Libro)
+            userDAO.añadirLibroPublicado(currentUserId, libro) // ✅ Ya es un objeto Libro
         }
     }
 }

@@ -20,6 +20,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.ImageButton
 
 class ChatFragment : Fragment() {
 
@@ -27,7 +28,7 @@ class ChatFragment : Fragment() {
     private lateinit var adapter: AdapterMessage
     private lateinit var editMessage: EditText
     private lateinit var btnSend: Button
-    private lateinit var btnLocation: Button
+    private lateinit var btnLocation: ImageButton
     private lateinit var db: FirebaseFirestore
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 

@@ -2,54 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- CARD -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="@android:color/holo_blue_light">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <!-- Checkbox -->
             <CheckBox
+                android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/checkBox"
                 android:text="Comprar"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"/>
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp"/>
 
+            <!-- Título -->
             <TextView
-                android:layout_marginTop="10dp"
-                android:textAlignment="center"
+                android:id="@+id/textCarr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textCarr"/>
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"
+                tools:text="Nombre del libro" />
 
+            <!-- Imagen -->
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
                 android:id="@+id/imageCard"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                tools:src="@android:drawable/ic_input_get"/>
+                android:layout_width="120dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:scaleType="fitCenter"
+                tools:src="@android:drawable/ic_input_get" />
 
+            <!-- Botón -->
             <Button
+                android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnDelete"
                 android:text="Eliminar"
                 android:layout_gravity="end"
-                android:layout_margin="10dp"/>
+                android:textColor="@android:color/white"
+                android:backgroundTint="@android:color/holo_red_light"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
 </LinearLayout>

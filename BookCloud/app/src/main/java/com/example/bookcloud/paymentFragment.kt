@@ -146,14 +146,30 @@ class paymentFragment : Fragment() {
     private fun vaciarCarritoYVolver() {
         val userId = auth.currentUser?.uid ?: return
 
-        val dbRef = FirebaseDatabase
+        val dbRealtime = FirebaseDatabase
             .getInstance("https://bookcloud-440ad-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("usuarios")
             .child(userId)
             .child("librosCarrito")
 
-        dbRef.removeValue().addOnCompleteListener {
-            val mensaje = if (it.isSuccessful) {
+        dbRealtime.removeValue().addOnCompleteListener { carritoTask ->
+            val firestore = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+
+            // 1. Eliminar libros de Firestore (colección "books")
+            librosSeleccionados.forEach { libro ->
+                libro.id?.let { idLibro ->
+                    firestore.collection("books").document(idLibro).delete()
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "Libro $idLibro eliminado de Firestore")
+                        }
+                        .addOnFailureListener {
+                            Log.e("Firestore", "Error eliminando libro $idLibro", it)
+                        }
+                }
+            }
+
+            // 2. Mostrar mensaje y volver al mainFragment
+            val mensaje = if (carritoTask.isSuccessful) {
                 "Compra realizada"
             } else {
                 "Compra realizada (no se pudo vaciar el carrito)"
@@ -161,7 +177,6 @@ class paymentFragment : Fragment() {
 
             Snackbar.make(requireView(), mensaje, Snackbar.LENGTH_LONG).show()
 
-            // Volver al mainFragment después de 1 segundo
             view?.postDelayed({
                 requireActivity()
                     .findNavController(R.id.nav_host_fragment_content_main)
@@ -169,6 +184,7 @@ class paymentFragment : Fragment() {
             }, 1000)
         }
     }
+
 
     private fun obtenerClientSecret(callback: (String?) -> Unit) {
         val url = "https://stripe-backend-s5cg.onrender.com/create-payment-intent"

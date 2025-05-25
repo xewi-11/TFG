@@ -65,7 +65,7 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
                     }
                 }
                 R.id.menu_detallesCard->{
-                    listener.onBookClick(libro)
+                    listener.onBookDetailClicK(libro)
                 }
                 R.id.menu_Chat->{
                     // Aquí puedes agregar la lógica para abrir el chat
@@ -82,5 +82,6 @@ class AdapterBook(var listaProductos:ArrayList<Libro>,val context: Context):
 
     interface OnBookListener {
         fun onBookClick(libro: Libro)
+        fun onBookDetailClicK(libro: Libro)
     }
 }
